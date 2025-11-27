@@ -1,5 +1,6 @@
-import botica from "botica-lib-node";
+import botica, {Bot} from "botica-lib-node";
 import {randomUUID} from "crypto";
+import {UUID} from "node:crypto";
 
 /**
  * A proactive bot that periodically generates random data and publishes it using the "process_data"
@@ -9,7 +10,7 @@ import {randomUUID} from "crypto";
  * by other bots in the Botica environment.
  */
 async function main() {
-  const bot = await botica();
+  const bot: Bot = await botica();
 
   // Periodically generates and publishes data for processing.
   // Runs at regular intervals, creating a new dataset and publishing it
@@ -34,7 +35,7 @@ async function main() {
  *
  * @returns {{data_id: UUID, timestamp: string}} a JSON string representing the generated data
  */
-function generateRandomData() {
+function generateRandomData(): { data_id: UUID; timestamp: string; } {
   return {
     data_id: randomUUID(),
     timestamp: new Date().toISOString()

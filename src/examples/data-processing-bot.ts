@@ -1,5 +1,6 @@
-import botica from "botica-lib-node";
+import botica, {Bot, ShutdownRequest, ShutdownResponse} from "botica-lib-node";
 import {randomUUID} from "crypto";
+import {UUID} from "node:crypto";
 
 /**
  * A reactive bot that processes incoming data and publishes the results.
@@ -8,12 +9,12 @@ import {randomUUID} from "crypto";
  * it performs a simulated data transformation and publishes the processed result.
  */
 async function main() {
-  const bot = await botica();
+  const bot: Bot = await botica();
 
   // Handles incoming orders with "process_data" action.
   // Receives raw data, processes it, and publishes a structured result
   // for other bots to consume.
-  bot.on("process_data", async (rawData) => {
+  bot.on("process_data", async (rawData: string) => {
     console.log(`Received data for processing: ${rawData}`);
 
     // Process the data (simulate data transformation)
@@ -27,7 +28,7 @@ async function main() {
   });
 
   // Example shutdown handler
-  bot.shutdownHandler.onShutdownRequest((req, res) => {
+  bot.shutdownHandler.onShutdownRequest((req: ShutdownRequest, res: ShutdownResponse) => {
     if (req.isForced || !isProcessingData()) {
       saveData();
       res.setCanceled(true);
@@ -49,7 +50,7 @@ async function main() {
  * @param {string} inputData - The raw input data
  * @returns {{processed: string, id: UUID}} A processed result with a UUID identifier
  */
-function processData(inputData) {
+function processData(inputData: string): { id: UUID; processed: string; } {
   // Simulating a processing operation (e.g., enrichment, validation)
   return {
     processed: inputData,
@@ -57,11 +58,11 @@ function processData(inputData) {
   };
 }
 
-function isProcessingData() {
+function isProcessingData(): boolean {
   return false;
 }
 
-function saveData() {
+function saveData(): void {
   // ...
 }
 
