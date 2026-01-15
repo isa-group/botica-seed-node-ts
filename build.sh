@@ -1,5 +1,8 @@
 #!/bin/bash
 
+SCRIPT_DIR=$(dirname "$0")
+cd "$SCRIPT_DIR" || exit 1
+
 echo "Building project..."
 if ! npm run build; then
   echo "Typescript build failed. Exiting."

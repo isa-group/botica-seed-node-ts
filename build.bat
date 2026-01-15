@@ -1,11 +1,15 @@
 @echo off
 setlocal EnableDelayedExpansion
 
+REM Navigate to the script's directory
+pushd "%~dp0"
+
 echo Building project...
 
 call npm run build
 if %ERRORLEVEL% NEQ 0 (
     echo Typescript build failed. Exiting.
+    popd
     exit /b 1
 )
 
@@ -19,7 +23,11 @@ echo Building Docker image with tag %IMAGE_TAG%...
 docker build -t "%IMAGE_TAG%" .
 if %ERRORLEVEL% NEQ 0 (
     echo Docker build failed. Exiting.
+    popd
     exit /b 1
 )
 
 echo Docker image built successfully with tag %IMAGE_TAG%.
+
+REM Return to the original directory
+popd
